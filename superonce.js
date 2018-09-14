@@ -38,15 +38,15 @@ const cheerio = require('cheerio');
 const app = express();
 const port = 13119;
 app.get('/superonce/:year/:month', (req, res) => {
-    let mes = req.params.month;
+    let mes = req.params.month.toString().toLowerCase();
     let anio = parseInt(req.params.year);
     let anioMin = 2010;
     let anioMax = new Date().getFullYear();
     let meses = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
-    if ((anio >= anioMin && anio <= anioMax) && meses.indexOf(mes) >= 0) {
+    if (anio >= anioMin && anio <= anioMax && meses.indexOf(mes) >= 0) {
         url = `https://www.juegosonce.es/historico-resultados-superonce-${mes}-${anio}`;
-        request(url, function (error, response, html) {
-            if (!error && response.statusCode == 200) {
+        request(url, (error, response, html) => {
+            if (!error && response.statusCode === 200) {
                 let combinaciones = [];
                 combinaciones.push({ "year": anio, "month": mes });
                 let $ = cheerio.load(html);
